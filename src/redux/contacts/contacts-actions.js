@@ -1,20 +1,19 @@
 /** @format */
 import { v4 as uuidv4 } from "uuid";
+import { createAction } from "@reduxjs/toolkit";
 
-const formSubmit = ({ name, number }) => ({
-  type: "add_Contact",
+const formSubmit = createAction("add_Contact", ({ name, number }) => ({
   payload: {
     id: uuidv4(),
     name,
     number,
   },
-});
+}));
 
-// export const deleteContact = (id) => {
-//   return {
-//     type: "delete_Contact",
-//     payload: { id },
-//   };
-// };
+const deleteContact = createAction("delete_Contact");
 
-export default formSubmit;
+const filters = createAction("filter_contact");
+
+const allActions = { formSubmit, deleteContact, filters };
+
+export default allActions;

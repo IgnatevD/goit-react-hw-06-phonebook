@@ -1,42 +1,27 @@
 /** @format */
+import { createReducer } from "@reduxjs/toolkit";
+import allActions from "./contacts-actions";
 
-import { combineReducers } from "redux";
-
-const contactsState = [];
-const filterState = "";
-
-const reducerContats = (state = contactsState, { type, payload }) => {
-  switch (type) {
-    case "add_Contact":
-      return [...state, payload];
-    case "delete_Contact":
-      return state.filter((contact) => contact.id !== payload.id);
-    default:
+const reducerContats = createReducer([], {
+  [allActions.formSubmit]: (state, { payload }) => {
+    const arryFindName = state.find(
+      (contact) => contact.name.toLowerCase() === payload.name.toLowerCase()
+    );
+    if (arryFindName) {
+      alert(`Ошибка, контакт с данным именем ${payload.name} уже есть`);
       return state;
-  }
-};
+    }
 
-const reducerFilter = (state = filterState, { type, payload }) => {
-  switch (type) {
-    case "filter_contact":
-      return payload;
-    default:
-      return state;
-  }
-};
-
-// const reducer = (state = initState, { type, payload }) => {
-//   switch (type) {
-//     case "add_Contact":
-//       return [...state.contacts, ...payload];
-//     case "delete_Contact":
-//       return state.filter((contact) => contact.id !== payload.id);
-//     default:
-//       return state;
-//   }
-// };
-
-export default combineReducers({
-  contacts: reducerContats,
-  filter: reducerFilter,
+    return [...state, payload];
+  },
+  [allActions.deleteContact]: (state, { payload }) =>
+    state.filter(({ id }) => id !== payload),
 });
+
+const reducerFilter = createReducer("", {
+  [allActions.filters]: (state, { payload }) => payload,
+});
+
+const allReducer = { reducerContats, reducerFilter };
+
+export default allReducer;

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import s from "../ContactForm/ContactForm.module.css";
 import { connect } from "react-redux";
-import formSubmit from "../../redux/contacts/contacts-actions";
+import allActions from "../../redux/contacts/contacts-actions";
 
 const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
@@ -16,8 +16,10 @@ const ContactForm = ({ onSubmit }) => {
 
   const handelSubmit = (e) => {
     e.preventDefault();
-    onSubmit(name, number);
+    if (name === "") return alert("Введите имя контакта");
+    if (number === "") return alert("Введите номер телефона");
 
+    onSubmit(name, number);
     setName("");
     setNumber("");
   };
@@ -75,7 +77,7 @@ ContactForm.propTypes = {
 };
 
 const mapDisp = (disp) => ({
-  onSubmit: (name, number) => disp(formSubmit({ name, number })),
+  onSubmit: (name, number) => disp(allActions.formSubmit({ name, number })),
 });
 
 export default connect(null, mapDisp)(ContactForm);

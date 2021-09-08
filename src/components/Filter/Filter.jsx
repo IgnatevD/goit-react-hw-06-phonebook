@@ -2,8 +2,10 @@
 
 import s from "../Filter/Filter.module.css";
 import { v4 as uuidv4 } from "uuid";
+import { connect } from "react-redux";
+import allActions from "../../redux/contacts/contacts-actions";
 
-const Filter = ({ handleFilterChange, value }) => {
+const Filter = ({ value, handleFilterChange }) => {
   const idFilter = uuidv4();
   return (
     <div className={s.filterContener}>
@@ -24,4 +26,11 @@ const Filter = ({ handleFilterChange, value }) => {
   );
 };
 
-export default Filter;
+const mapStateProp = (state) => ({
+  value: state.filters,
+});
+const mapDisp = (disp) => ({
+  handleFilterChange: (e) => disp(allActions.filters(e.target.value)),
+});
+
+export default connect(mapStateProp, mapDisp)(Filter);

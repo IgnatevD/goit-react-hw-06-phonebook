@@ -4,8 +4,10 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import s from "../ContactForm/ContactForm.module.css";
+import { connect } from "react-redux";
+import formSubmit from "../../redux/contacts/contacts-actions";
 
-export default function ContactForm({ onSubmit }) {
+const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
 
@@ -65,9 +67,15 @@ export default function ContactForm({ onSubmit }) {
       </button>
     </form>
   );
-}
+};
 
 ContactForm.propTypes = {
   name: PropTypes.string,
   number: PropTypes.string,
 };
+
+const mapDisp = (disp) => ({
+  onSubmit: (name, number) => disp(formSubmit({ name, number })),
+});
+
+export default connect(null, mapDisp)(ContactForm);

@@ -4,12 +4,15 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
+import { connect } from "react-redux";
+import formSubmit from "../redux/contacts/contacts-actions";
+
 import Filter from "./Filter/Filter";
 import s from "../components/App.module.css";
 
 import { v4 as uuidv4 } from "uuid";
 
-export default function App() {
+const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState("");
 
@@ -68,10 +71,12 @@ export default function App() {
       </section>
     </>
   );
-}
+};
 
 App.propTypes = {
   contacts: PropTypes.array,
   name: PropTypes.string,
   number: PropTypes.string,
 };
+
+export default App;

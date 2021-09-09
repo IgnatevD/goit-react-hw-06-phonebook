@@ -1,10 +1,20 @@
 /** @format */
 
 import s from "./ContactList.module.css";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import allActions from "../../redux/contacts/contacts-actions";
 
-const ContactList = ({ contacts, deleteContact }) => {
+const ContactList = () => {
+  const contacts = useSelector((state) => {
+    const normalFilter = state.filters.toLowerCase();
+    const visibleContacns = state.contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(normalFilter)
+    );
+    return visibleContacns;
+  });
+  const dispatch = useDispatch();
+  const deleteContact = (id) => dispatch(allActions.deleteContact(id));
+
   return (
     <ul className={s.contactList}>
       {contacts?.map(({ id, name, number }) => (
@@ -24,18 +34,4 @@ const ContactList = ({ contacts, deleteContact }) => {
   );
 };
 
-const mapStateProp = ({ contacts, filters }) => {
-  const normalFilter = filters.toLowerCase();
-  const visibleContacns = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(normalFilter)
-  );
-  return {
-    contacts: visibleContacns,
-  };
-};
-
-const mapDisp = (disp) => ({
-  deleteContact: (id) => disp(allActions.deleteContact(id)),
-});
-
-export default connect(mapStateProp, mapDisp)(ContactList);
+export default ContactList;

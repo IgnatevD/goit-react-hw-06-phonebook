@@ -2,11 +2,16 @@
 
 import s from "../Filter/Filter.module.css";
 import { v4 as uuidv4 } from "uuid";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import allActions from "../../redux/contacts/contacts-actions";
 
-const Filter = ({ value, handleFilterChange }) => {
+const Filter = () => {
   const idFilter = uuidv4();
+  const value = useSelector((state) => state.filters);
+  const dispatch = useDispatch();
+  const handleFilterChange = (e) =>
+    dispatch(allActions.filters(e.target.value));
+
   return (
     <div className={s.filterContener}>
       <label htmlFor={idFilter} className={s.labelFilter}>
@@ -26,11 +31,4 @@ const Filter = ({ value, handleFilterChange }) => {
   );
 };
 
-const mapStateProp = (state) => ({
-  value: state.filters,
-});
-const mapDisp = (disp) => ({
-  handleFilterChange: (e) => disp(allActions.filters(e.target.value)),
-});
-
-export default connect(mapStateProp, mapDisp)(Filter);
+export default Filter;
